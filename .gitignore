@@ -24,3 +24,4 @@ archive.zip
 *~
 .*.sw?
 /gateway/squarespace_api_key.py
+.vercel
