@@ -86,7 +86,8 @@ class SquarespaceGateway:
         return inventory_list
 
     @staticmethod
-    def __parse_order(order: dict | requests.Response, isJSON=True):
+    # def __parse_order(order: dict | requests.Response, isJSON=True):
+    def __parse_order(order: dict, isJSON=True):
         if isJSON:
             order = order.json()
 
