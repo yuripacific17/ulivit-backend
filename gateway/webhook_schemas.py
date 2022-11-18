@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from enum import Enum
+from typing import Union
 
 
 class TopicEnum(Enum):
@@ -27,7 +28,7 @@ class WebhookBase(BaseModel):
 
 class WebhookData(BaseModel):
     orderId: str
-    update: UpdateEnum | None
+    update: Union[UpdateEnum, None]
 
 
 class WebhookRequest(WebhookBase):
