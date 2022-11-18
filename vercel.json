@@ -4,5 +4,6 @@
   ],
   "routes": [
     {"src": "/(.*)", "dest": "routes.py"}
-  ]
+  ],
+  "buildCommand": "alembic upgrade head"
 }
