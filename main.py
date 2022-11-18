@@ -16,6 +16,9 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000",
+    "http://impactcalculator.ulivit.ca",
+    "https://impactcalculator.ulivit.ca/",
+    "impactcalculator.ulivit.ca"
 ]
 
 app.add_middleware(
