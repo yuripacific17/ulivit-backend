@@ -1,10 +1,13 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, schema
 from sqlalchemy_utils import database_exists, create_database
 
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # set up test database for unit testing
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/ulivit"
+load_dotenv()
+SQLALCHEMY_DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URL')
 SQLALCHEMY_SCHEMA_NAME = "CCC"
 
 
