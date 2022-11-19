@@ -2,9 +2,7 @@
   "builds": [
     {"src": "/routes.py", "use": "@vercel/python"}
   ],
-  "routes": [
-    {"src": "/(.*)", "dest": "routes.py"}
-  ],
+  "rewrites": [{"source": "/(.*)", "destination": "routes.py"}],
   "buildCommand": "alembic upgrade head",
   "headers": [
     {
