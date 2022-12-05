@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from router import admin_router, affiliate_climate_change_impact_router, affiliate_router, calculator_router, \
     climate_measure_router
 

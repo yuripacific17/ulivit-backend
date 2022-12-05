@@ -1,11 +1,24 @@
+import os
+from dotenv import load_dotenv
+
 from fastapi.responses import JSONResponse
 
 from .squarespace_gateway import SquarespaceGateway
 from crud.climate_measure_crud import get_climate_measure_by_sku
+from crud.climate_measure_crud import get_all_climate_measures
 from crud.affiliate_crud import get_associated_affiliate_promo_code_from_list
 from crud.affiliate_climate_change_impact_crud import get_affiliate_climate_change_impact_by_promo_code
 from schemas import AffiliateClimateChangeImpactCreate
 from .webhook_schemas import WebhookRequest
+import models
+
+# TODO: delete after testing
+import mailchimp_transactional as MailchimpTransactional
+from mailchimp_transactional.api_client import ApiClientError
+
+
+load_dotenv()
+MC_API_KEY = os.environ.get('MC_API_KEY')
 
 
 def get_order_from_webhook_response(webHookSchema: WebhookRequest, gateway):
@@ -87,3 +100,46 @@ def calculator_create(webHookSchema: WebhookRequest, db):
 # TODO: the climate change impact audit table needs to be first implemented
 def calculator_update(webHookSchema: WebhookRequest, db):
     pass
+
+
+def send_email():
+    try:
+        mailchimp = MailchimpTransactional.Client(MC_API_KEY)
+        print(mailchimp.messages)
+
+        response = mailchimp.messages.send_template(
+            {"template_name": "template_name", "template_content": [{}], "message": {}})
+        print(response)
+    except ApiClientError as error:
+        print("An exception occurred: {}".format(error.text))
+
+
+def fetch_sku_for_admin(db,skip:int = 0, limit: int = 100):
+    gateway = SquarespaceGateway()
+    # brings back all ivnentory records from sqaurespace # sku = 28
+    inventory = gateway.get_all_inventories()
+
+    # bring back all climate measure from our database
+    climate_measure = get_all_climate_measures(db=db, skip=skip, limit=limit)
+
+    #extra sku number list 
+    extra_sku=[]
+
+    for i in inventory:
+        extra_sku.append(i.sku)
+
+    for j in climate_measure:
+        if j.sku in extra_sku:
+            extra_sku.remove(j.sku)
+    
+    for num in extra_sku:
+        db_climateMeasure = models.ClimateMeasure(sku=num, carsOffRoad='',
+                                              fightingFoodWaste='',
+                                              waterSaved='', landUse='',
+                                              cholesterolSaved='')
+        db.add(db_climateMeasure)
+        db.commit()
+        db.refresh(db_climateMeasure)
+    return
+
+

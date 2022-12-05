@@ -49,17 +49,29 @@ def get_admin_by_id(db: Session, id: int):
     return query
 
 
-def get_all_admin(db: Session, skip: int = 0, limit: int = 100):
-    pass
+def get_all_admins(db: Session, skip: int = 0, limit: int = 100):
+    query = db.query(models.Admin).offset(skip).limit(limit).all()
+    return query
 
 
 def delete_admin_by_id(db:Session, id: int):
-    pass
-
+    if get_admin_by_id(db=db, id=id) is None:
+        return "Cannot find admin with given id"
+    query = db.execute(delete(models.Admin).where(models.Admin.id == id))
+    db.commit()
+    return "Successfully deleted Admin"
 
 def delete_admin_by_username(db: Session, username: str):
-    pass
+    if get_admin_by_username(db=db, username=username) is None:
+        return "Cannot find admin with given username"
+    query = db.execute(delete(models.Admin).where(models.Admin.username == username))
+    db.commit()
+    return "Successfully deleted Admin"
 
 
 def delete_admin_by_email(db: Session, email: str):
-    pass
+    if get_admin_by_email(db=db, emailAddress=email) is None:
+        return "Cannot find admin with given email"
+    query = db.execute(delete(models.Admin).where(models.Admin.emailAddress == email))
+    db.commit()
+    return "Successfully deleted Admin"

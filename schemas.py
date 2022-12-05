@@ -17,11 +17,11 @@ class HTTPValidation(BaseModel):
 
 class ClimateMeasureBase(BaseModel):
     sku: str
-    carsOffRoad: float
-    fightingFoodWaste: float
-    waterSaved: float
-    landUse: float
-    cholesterolSaved: float
+    carsOffRoad: Union[float, None] = None
+    fightingFoodWaste: Union[float, None] = None
+    waterSaved: Union[float, None] = None
+    landUse: Union[float, None] = None
+    cholesterolSaved: Union[float, None] = None
 
 
 class ClimateMeasureCreate(ClimateMeasureBase):
@@ -106,7 +106,7 @@ class AffiliateCreate(AffiliateBase):
 
 class Affiliate(AffiliateBase):
     id: int
-    affiliateStatus: AffiliateStatus
+    affiliateStatus: Union[AffiliateStatus, None] = None
     affiliateClimateChangeImpact: Union[AffiliateClimateChangeImpact, None] = None
 
     class Config:

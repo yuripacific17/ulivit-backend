@@ -23,4 +23,4 @@ archive.zip
 # vim temporary files
 *~
 .*.sw?
-.vercel
+/gateway/squarespace_api_key.py

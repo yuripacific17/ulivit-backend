@@ -54,6 +54,22 @@ def delete_affiliate_by_id(db: Session, id: int):
     return "Successfully deleted Affiliate"
 
 
+def update_affiliate_by_id(db: Session, affiliate: schemas.Affiliate):
+    db.execute(update(models.Affiliate).where(models.Affiliate.id == affiliate.id)
+               .values(promoCode=affiliate.promoCode, organizationName=affiliate.organizationName,
+                       emailAddress=affiliate.emailAddress))
+    db.commit()
+    return get_affiliate_by_id(db=db, id=affiliate.id)
+
+
+def update_affiliate_by_email_address(db: Session, affiliate: schemas.Affiliate):
+    db.execute(update(models.Affiliate).where(models.Affiliate.emailAddress == affiliate.emailAddress)
+               .values(promoCode=affiliate.promoCode, organizationName=affiliate.organizationName,
+                       emailAddress=affiliate.emailAddress))
+    db.commit()
+    return get_affiliate_by_email(db=db, emailAddress=affiliate.emailAddress)
+
+
 def update_affiliate_by_promote_code(db: Session, affiliate: schemas.AffiliateCreate):
     db.execute(update(models.Affiliate).where(models.Affiliate.promoCode == affiliate.promoCode)
                .values(promoCode=affiliate.promoCode, organizationName=affiliate.organizationName,

@@ -18,10 +18,20 @@ router = APIRouter(
 # upsert, create affiliate if doesn't exist, otherwise create it
 @router.post("/", response_model=schemas.Affiliate)
 def post_affiliate(affiliate: schemas.AffiliateCreate, db: Session = Depends(get_db)):
-    if affiliate_crud.get_affiliate_by_promo_code(db=db, promoCode=affiliate.promoCode) is None:
+    if affiliate_crud.get_affiliate_by_email(db=db, emailAddress=affiliate.emailAddress) is None:
         return affiliate_crud.create_affiliate(db=db, affiliate=affiliate)
     else:
-        return affiliate_crud.update_affiliate_by_promote_code(db=db, affiliate=affiliate)
+        return JSONResponse(status_code=404, content={"ErrorType": "RecordNotFoundError",
+                                                      "Description": "Affiliate With the Same Email Found"})
+
+
+@router.put("/", response_model=schemas.Affiliate, responses={404: {"model":schemas.HTTPError}})
+def update_affiliate(affiliate:schemas.Affiliate, db: Session = Depends(get_db)):
+    if affiliate_crud.get_affiliate_by_id(db=db, id=affiliate.id) is None:
+        return JSONResponse(status_code=404, content={"ErrorType": "RecordNotFoundError",
+                                                      "Description": "Affiliate Not Found"})
+    else:
+        return affiliate_crud.update_affiliate_by_id(db=db, affiliate=affiliate)
 
 
 @router.get("/", response_model=list[schemas.Affiliate])

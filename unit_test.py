@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, schema, MetaData
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -7,7 +9,8 @@ from dependencies import get_db
 from main import app
 
 # set up test database for unit testing
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/ulivit"
+load_dotenv()
+SQLALCHEMY_DATABASE_URL = os.environ.get('SQLALCHEMY_DATABASE_URL')
 SQLALCHEMY_SCHEMA_NAME = "CCC"
 
 
